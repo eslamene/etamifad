@@ -1,0 +1,74 @@
+<?php 
+/*********************************/
+/*********************************/
+/*import config file*/
+/*********************************/
+include 'config.php';
+/*********************************/
+if (isset($_SESSION['Connection']))
+{
+	if ($_SESSION['Connection']==$DBConnection01) 
+	{
+		//connect to a MySQL
+		$UserName 	= "root";
+		$Password 	= "IT2tam!f";
+		$HostName 	= "localhost"; 
+		$DBName		= "etamifad_eta";
+	
+		$MySQLConnection 	=	mysqli_connect($HostName, $UserName, $Password, $DBName);
+		if ($MySQLConnection->connect_error)
+		die('Connect Error (' . mysqli_connect_errno() . ') '. mysqli_connect_error());
+	
+		//connect to a MSSQL 
+		$SQLUser= 'sa';
+		$SQLPassword = 'sa';
+		$SQLServer = 'SRV-MIF-0002\ETAMIFADSQL';
+		$SQLDatabase = 'ETALTD1_2014';
+		$SQLDatabaseAlias = 'ETA 2014'; //Database alias
+		$SQLDatabaseCompany= 'Eta';
+		/*$MSSQLConnection = odbc_connect("Driver={SQL Server};Server=$SQLServer;Database=$SQLDatabase;", $SQLUser, $SQLPassword);*/
+	}
+	else if ($_SESSION['Connection']==$DBConnection02) 
+	{
+		//connect to a MySQL
+		$UserName 	= "root";
+		$Password 	= "IT2tam!f";
+		$HostName 	= "localhost"; 
+		$DBName		= "etamifad_mifad";
+	
+		$MySQLConnection 	=	mysqli_connect($HostName, $UserName, $Password, $DBName);
+		if ($MySQLConnection->connect_error)
+		die('Connect Error (' . mysqli_connect_errno() . ') '. mysqli_connect_error());
+	
+		//connect to a MSSQL 
+		$SQLUser= 'sa';
+		$SQLPassword = 'sa';
+		$SQLServer = 'SRV-MIF-0002\ETAMIFADSQL';
+		$SQLDatabase = 'NEW_MIFAD_2014';
+		$SQLDatabaseAlias = 'MIFAD 2014'; //Database alias
+		$SQLDatabaseCompany= 'Mifad';
+		/*$MSSQLConnection = odbc_connect("Driver={SQL Server};Server=$SQLServer;Database=$SQLDatabase;", $SQLUser, $SQLPassword);*/
+	}
+	else if ($_SESSION['Connection']==$DBConnection03) 
+	{
+		//connect to a MySQL
+		$UserName 	= "root";
+		$Password 	= "IT2tam!f";
+		$HostName 	= "localhost"; 
+		$DBName		= "etamifad_test";
+	
+		$MySQLConnection 	=	mysqli_connect($HostName, $UserName, $Password, $DBName);
+		if ($MySQLConnection->connect_error)
+		die('Connect Error (' . mysqli_connect_errno() . ') '. mysqli_connect_error());
+	
+		//connect to a MSSQL 
+		$SQLUser= 'sa';
+		$SQLPassword = 'sa';
+		$SQLServer = 'SRV-MIF-0002\ETAMIFADSQL';
+		$SQLDatabase = 'NEW_MIFAD_2014';
+		$SQLDatabaseAlias = 'TEST DB'; //Database alias
+		$SQLDatabaseCompany= 'Mifad';
+		/*$MSSQLConnection = odbc_connect("Driver={SQL Server};Server=$SQLServer;Database=$SQLDatabase;", $SQLUser, $SQLPassword);*/
+	}
+}
+?>

@@ -1,0 +1,2 @@
+TRUNCATE TABLE etamifad_test.members;
+INSERT INTO etamifad_test.members SELECT * FROM etamifad_eta.members;

@@ -1,0 +1,298 @@
+<?php 
+/******************************/
+/*New Sales Order Numbers*/
+$New_SO_Query       		= "SELECT ID from sales_order WHERE Approve = ''";
+$New_SO_Result      		= mysqli_query($MySQLConnection,$New_SO_Query);
+$New_SO        				= mysqli_num_rows($New_SO_Result);
+/******************************/
+/******************************/
+/*Rejected Sales Order Numbers*/
+$Rejected_SO_Query  		= "SELECT ID from sales_order WHERE Approve = 'Rejected' or Approve = 'Pending'";
+$Rejected_SO_Result 		= mysqli_query($MySQLConnection,$Rejected_SO_Query);
+$Rejected_SO   				= mysqli_num_rows($Rejected_SO_Result);
+/******************************/
+/******************************/
+/*Archived Sales Order Numbers*/
+$Archived_SO_Query  		= "SELECT ID from sales_order WHERE Approve != 'Hidden'";
+$Archived_SO_Result 		= mysqli_query($MySQLConnection,$Archived_SO_Query);
+$Archived_SO   				= mysqli_num_rows($Archived_SO_Result);
+/******************************/
+/******************************/
+/*Sent_Delivery Distribution Orders*/
+$Sent_Delivery_SO_Query 	= "SELECT * from sales_order 
+							LEFT JOIN sales_order_lines on sales_order.LPO_NO = sales_order_lines.LPO_NO 
+							LEFT JOIN customers on sales_order.Customer_NO = customers.Customer_NO 
+							WHERE sales_order_lines.ATD =1 and sales_order_lines.Delivery_Date_Start ='' GROUP BY sales_order.LPO_NO";
+$Sent_Delivery_SO_Result 	= mysqli_query($MySQLConnection,$Sent_Delivery_SO_Query);
+$Sent_Delivery_SO 			= mysqli_num_rows($Sent_Delivery_SO_Result);
+/******************************//******************************/
+/*New_Delivery Distribution Orders*/
+$New_Delivery_SO_Query 		= "SELECT * from sales_order 
+							LEFT JOIN sales_order_lines on sales_order.LPO_NO = sales_order_lines.LPO_NO 
+							LEFT JOIN customers on sales_order.Customer_NO = customers.Customer_NO 
+							WHERE sales_order_lines.ATD =1 and sales_order_lines.Delivery_Date_Start !='' GROUP BY sales_order.LPO_NO";
+$New_Delivery_SO_Result 	= mysqli_query($MySQLConnection,$New_Delivery_SO_Query);
+$New_Delivery_SO 			= mysqli_num_rows($New_Delivery_SO_Result);
+/******************************/
+/******************************/
+/*Sales Available to Deliver*/
+$ATD_SO_Query      			= "SELECT * from sales_order 
+							LEFT JOIN sales_order_lines on sales_order.LPO_NO = sales_order_lines.LPO_NO
+							WHERE sales_order.Approve = 'Accepted' AND sales_order_lines.Delivery_Available !=0 AND sales_order_lines.ATD !=1  GROUP BY sales_order.LPO_NO";
+$ATD_SO_Result 				= mysqli_query($MySQLConnection,$ATD_SO_Query);
+$ATD_SO 					= mysqli_num_rows($ATD_SO_Result);
+/******************************/
+/******************************/
+/*New Store Orders*/
+$New_WH_Query       		= "SELECT * from sales_order 
+							LEFT JOIN sales_order_lines on sales_order.LPO_NO = sales_order_lines.LPO_NO
+							WHERE Approve = 'Accepted' AND sales_order_lines.Delivery_Available =0 AND sales_order_lines.Delivered_Quantities =0  And sales_order_lines.Notes_Warehouse ='' GROUP BY sales_order.LPO_NO";
+$New_WH_Result 				= mysqli_query($MySQLConnection,$New_WH_Query);
+$New_WH 					= mysqli_num_rows($New_WH_Result);
+/******************************/
+/******************************/
+/*Available to Promise*/
+$ATP_WH_Query 				= "SELECT * from sales_order 
+							LEFT JOIN sales_order_lines on sales_order.LPO_NO = sales_order_lines.LPO_NO
+							WHERE Approve = 'Accepted' AND sales_order_lines.Delivery_Available + sales_order_lines.Delivered_Quantities < sales_order_lines.Quantity GROUP BY sales_order.LPO_NO";
+$ATP_WH_Result 				= mysqli_query($MySQLConnection,$ATP_WH_Query);
+$ATP_WH 					= mysqli_num_rows($ATP_WH_Result);
+/******************************/
+/******************************/
+/*Available to Deliver*/
+$ATD_WH_Query 				= "SELECT * from sales_order 
+							LEFT JOIN sales_order_lines on sales_order.LPO_NO = sales_order_lines.LPO_NO
+							WHERE Approve = 'Accepted' AND sales_order_lines.Delivery_Available !=0 GROUP BY sales_order.LPO_NO";
+$ATD_WH_Result 				= mysqli_query($MySQLConnection,$ATD_WH_Query);
+$ATD_WH 					= mysqli_num_rows($ATD_WH_Result);
+/******************************/
+/******************************/
+/*New Distribution Orders*/
+$New_Dis_Query 				= "SELECT * from sales_order 
+							LEFT JOIN sales_order_lines on sales_order.LPO_NO = sales_order_lines.LPO_NO 
+							LEFT JOIN customers on sales_order.Customer_NO = customers.Customer_NO 
+							WHERE sales_order_lines.ATD =1 and sales_order_lines.Delivery_Date_Start ='' GROUP BY sales_order.LPO_NO";
+$New_Dis_Result 			= mysqli_query($MySQLConnection,$New_Dis_Query);
+$New_Dis 					= mysqli_num_rows($New_Dis_Result);
+/******************************/
+/******************************/
+/*New_Delivery Distribution Orders*/
+$New_Delivery_Dis_Query 	= "SELECT * from sales_order 
+							LEFT JOIN sales_order_lines on sales_order.LPO_NO = sales_order_lines.LPO_NO 
+							LEFT JOIN customers on sales_order.Customer_NO = customers.Customer_NO 
+							WHERE sales_order_lines.ATD =1 and sales_order_lines.Delivery_Date_Start !='' GROUP BY sales_order.LPO_NO";
+$New_Delivery_Dis_Result 	= mysqli_query($MySQLConnection,$New_Delivery_Dis_Query);
+$New_Delivery_Dis 			= mysqli_num_rows($New_Delivery_Dis_Result);
+/******************************/
+?>
+
+
+				<!-- sidebar: style can be found in sidebar.less -->
+				<section class="sidebar">
+					<!-- Sidebar user panel -->
+					<div class="user-panel">
+						<div class="pull-left image">
+							<img src="<?php echo 'img/avatar/'.$_SESSION['Avatar'].'.png'; ?>" class="img-circle" alt="User Image" />
+						</div>
+						<div class="pull-left info">
+							<p>Hello, <?php echo $_SESSION["First_Name"] ?></p>
+							<p><?php echo $_SESSION["Department"] ?></p>
+							<a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+						</div>
+					</div>
+					<!-- sidebar menu: : style can be found in sidebar.less -->
+					<ul class="sidebar-menu">
+						<li>
+							<a href="#">
+								<i class="fa fa-dashboard"></i> <span>Dashboard</span>
+							</a>
+						</li>
+						<!-- ***************************************************** -->
+						<!-- Show Customers Map ********************************** -->
+						<!-- ***************************************************** -->
+						<?php 
+						if (in_array($_SESSION['Department'], $Permission_Map))
+						:?>
+						<li>
+							<a href="map.php">
+								<i class="glyphicon glyphicon-map-marker"></i> <span>Map</span>
+							</a>
+						</li>
+						<?php endif;?>
+						<!-- ***************************************************** -->
+						<!-- End of Customers Map ******************************** -->
+						<!-- ***************************************************** -->
+
+						<!-- ***************************************************** -->
+						<!-- Sales Menu ****************************************** -->
+						<!-- ***************************************************** -->
+						<?php 
+						if (in_array($_SESSION['Department'], $Permission_Sales))
+						:?>
+						<li class="treeview <?php if ($_SESSION['PageName'] == 'Sales') echo 'active';?>">
+							<a href="#">
+								<i class="fa fa-gbp"></i>
+								<span>Sales <?php if ($Rejected_SO !=0) { echo '<small class="badge bg-red">reject</small>';} ?></span>
+								<i class="fa fa-plus pull-right"></i>
+							</a>
+							<ul class="treeview-menu">
+								<li><a href="index.php?Report=sales-01&View=New"><i class="fa fa-file-text"></i> Get Sales Order</a></li>
+								<li><a href="index.php?Report=sales-02&View=Rejected"><?php if ($Rejected_SO !=0) { echo '<small class="badge pull-right bg-red">'.$Rejected_SO.'</small>';} ?><i class="fa fa-file-text"></i> Rejected Sales Order</a></li>
+								<li><a href="index.php?Report=sales-03&View=ATP"><?php if ($ATP_WH !=0) { echo '<small class="badge pull-right bg-maroon">'.$ATP_WH.'</small>';} ?><i class="fa fa-file-text"></i> Available to Promise</a></li>
+								<li><a href="index.php?Report=sales-03&View=ATD"><?php if ($ATD_SO !=0) { echo '<small class="badge pull-right bg-blue">'.$ATD_SO.'</small>';} ?><i class="fa fa-file-text"></i> Available to Delivery</a></li>
+								<li><a href="index.php?Report=sales-04&View=Sent"><?php if ($Sent_Delivery_SO !=0) { echo '<small class="badge pull-right bg-yellow">'.$Sent_Delivery_SO.'</small>';} ?><i class="fa fa-file-text"></i> Delivery - Sent</a></li>
+								<li><a href="index.php?Report=sales-04&View=New"><?php if ($New_Delivery_SO !=0) { echo '<small class="badge pull-right bg-green">'.$New_Delivery_SO.'</small>';} ?><i class="fa fa-file-text"></i> Delivery - New</a></li>
+								<li><a href="index.php?Report=sales-03&View=Archived"><?php if ($Archived_SO !=0) { echo '<small class="badge pull-right bg-teal">'.$Archived_SO.'</small>';} ?><i class="fa fa-file-text"></i> Sales Order - Archive</a></li>
+							</ul>
+						</li>
+						<?php endif;?>
+						<!-- ***************************************************** -->
+						<!-- End of Sales Menu *********************************** -->
+						<!-- ***************************************************** -->
+
+						<!-- ***************************************************** -->
+						<!-- Sales Forecast Menu ********************************* -->
+						<!-- ***************************************************** -->
+						<?php 
+						if ((in_array($_SESSION['Department'], $Permission_SFC)) && $_SESSION['Connection']=='Eta')
+						:?>
+						<li class="treeview <?php if ($_SESSION['PageName'] == 'Sales Forecast') echo 'active';?>">
+							<a href="#">
+								<i class="fa fa-puzzle-piece"></i>
+								<span>Sales Forecast</span>
+								<i class="fa fa-plus pull-right"></i>
+							</a>
+							<ul class="treeview-menu">
+								<?php
+								/*allow creating and reviewing sales forecast*/
+								if ((in_array($_SESSION['Department'], $Permission_SFC_Edit)))
+								:?>
+								<li><a href="index.php?Report=sales-05"><i class="fa fa-file-text"></i> Create New SFC</a></li>
+								<li><a href="index.php?Report=sales-06"><i class="fa fa-file-text"></i> Review SFC</a></li>
+								<?php endif;?>
+
+							<!-- Reports -->
+							<li class="treeview <?php if ($_SESSION['PageName'] == 'Sales Forecast') echo 'active';?>">
+							<a href="#">
+								<i class="fa fa-folder-open"></i>
+								<span>Report's</span>
+								<i class="fa fa-plus pull-right"></i>
+							</a>
+								<ul class="treeview-menu">
+
+									<li class="treeview <?php if ($_SESSION['PageName'] == 'Sales Forecast') echo 'active';?>">
+										<a href="#">
+											<i class="fa fa-folder-open"></i>
+											<span>Product's</span>
+											<i class="fa fa-plus pull-right"></i>
+										</a>
+										<ul class="treeview-menu">
+											<li><a href="index.php?Report=sales-07-package"><i class="fa fa-file-text"></i> Package</a></li>
+											<li><a href="index.php?Report=sales-07-unit"><i class="fa fa-file-text"></i> kg, unit, l, m*</a></li>
+										</ul>
+									</li>
+									<li class="treeview <?php if ($_SESSION['PageName'] == 'Sales Forecast') echo 'active';?>">
+										<a href="#">
+											<i class="fa fa-folder-open"></i>
+											<span>Representative's</span>
+											<i class="fa fa-plus pull-right"></i>
+										</a>
+										<ul class="treeview-menu">
+											<li><a href="index.php?Report=sales-08-package"><i class="fa fa-file-text"></i> Package</a></li>
+											<li><a href="index.php?Report=sales-08-unit"><i class="fa fa-file-text"></i> kg, unit, l, m*</a></li>
+										</ul>
+									</li>
+									<li class="treeview <?php if ($_SESSION['PageName'] == 'Sales Forecast') echo 'active';?>">
+										<a href="#">
+											<i class="fa fa-folder-open"></i>
+											<span>Customer's</span>
+											<i class="fa fa-plus pull-right"></i>
+										</a>
+										<ul class="treeview-menu">
+											<li><a href="index.php?Report=sales-09-package"><i class="fa fa-file-text"></i> Package</a></li>
+											<li><a href="index.php?Report=sales-09-unit"><i class="fa fa-file-text"></i> kg, unit, l, m*</a></li>
+										</ul>
+									</li>
+								
+								</ul>
+							</li>
+
+							</ul>
+						</li>
+						<?php endif;?>
+						<!-- ***************************************************** -->
+						<!-- End of Sales Forecast Menu ************************** -->
+						<!-- ***************************************************** -->
+
+						<!-- ***************************************************** -->
+						<!-- Finance Menu **************************************** -->
+						<!-- ***************************************************** -->
+						<?php 
+						if (in_array($_SESSION['Department'], $Permission_Finance))
+						:?>
+						<li class="treeview <?php if ($_SESSION['PageName'] == 'Finance') echo 'active';?>">
+							<a href="#">
+								<i class="fa fa-bar-chart-o"></i>
+								<span>Finance <?php if ($New_SO !=0) { echo '<small class="badge bg-green">new</small>';} ?></span>
+								<i class="fa fa-plus pull-right"></i>
+							</a>
+							<ul class="treeview-menu">
+								<li><a href="index.php?Report=finance-01&View=New"><?php if ($New_SO !=0) { echo '<small class="badge pull-right bg-green">'.$New_SO.'</small>';} ?><i class="fa fa-file-text"></i> Sales Order - New</a></li>
+								<li><a href="index.php?Report=finance-01&View=Rejected"><?php if ($Rejected_SO !=0) { echo '<small class="badge pull-right bg-red">'.$Rejected_SO.'</small>';} ?><i class="fa fa-file-text"></i> Sales Order - Rejected</a></li>
+								<li><a href="index.php?Report=finance-01&View=Archived"><?php if ($Archived_SO !=0) { echo '<small class="badge pull-right bg-teal">'.$Archived_SO.'</small>';} ?><i class="fa fa-file-text"></i> Sales Order - Archive</a></li>
+							</ul>
+						</li>
+						<?php endif;?>
+
+						<!-- ***************************************************** -->
+						<!-- End of Finance Menu ********************************* -->
+						<!-- ***************************************************** -->
+
+						<!-- ***************************************************** -->
+						<!-- Warehouse Menu ************************************** -->
+						<!-- ***************************************************** -->
+						<?php 
+						if (in_array($_SESSION['Department'], $Permission_Warehouse))
+						:?>
+						<li class="treeview <?php if ($_SESSION['PageName'] == 'Warehouse') echo 'active';?>">
+							<a href="#">
+								<i class="fa fa-fw fa-shopping-cart"></i>
+								<span>Warehouse <?php if ($New_WH !=0) { echo '<small class="badge bg-green">new</small>';} ?></span>
+								<i class="fa fa-plus pull-right"></i>
+							</a>
+							<ul class="treeview-menu">
+								<li><a href="index.php?Report=warehouse-01&View=New"><?php if ($New_WH !=0) { echo '<small class="badge pull-right bg-green">'.$New_WH.'</small>';} ?><i class="fa fa-file-text"></i> New Item's</a></li>
+								<li><a href="index.php?Report=warehouse-01&View=ATP"><?php if ($ATP_WH !=0) { echo '<small class="badge pull-right bg-maroon">'.$ATP_WH.'</small>';} ?><i class="fa fa-file-text"></i> Available to Promise</a></li>
+								<li><a href="index.php?Report=warehouse-01&View=ATD"><?php if ($ATD_WH !=0) { echo '<small class="badge pull-right bg-navy">'.$ATD_WH.'</small>';} ?><i class="fa fa-file-text"></i> Available to Deliver</a></li>
+							</ul>
+						</li>
+						<?php endif;?>
+						<!-- ***************************************************** -->
+						<!-- End of Warehouse Menu ******************************* -->
+						<!-- ***************************************************** -->
+
+						<!-- ***************************************************** -->
+						<!-- Distribution Menu *********************************** -->
+						<!-- ***************************************************** -->
+						<?php 
+						if (in_array($_SESSION['Department'], $Permission_Distribution))
+						:?>
+						<li class="treeview <?php if ($_SESSION['PageName'] == 'Distribution') echo 'active';?>">
+							<a href="#">
+								<i class="fa fa-fw fa-road"></i>
+								<span>Distribution <?php if ($New_Dis !=0) { echo '<small class="badge bg-green">new</small>';} ?></span>
+								<i class="fa fa-plus pull-right"></i>
+							</a>
+							<ul class="treeview-menu">
+								<li><a href="index.php?Report=distribution-01&View=New"><?php if ($New_Dis !=0) { echo '<small class="badge pull-right bg-green">'.$New_Dis.'</small>';} ?><i class="fa fa-file-text"></i> New Item's</a></li>
+								<li><a href="index.php?Report=distribution-01&View=Planned"><?php if ($New_Delivery_Dis !=0) { echo '<small class="badge pull-right bg-yellow">'.$New_Delivery_Dis.'</small>';} ?><i class="fa fa-file-text"></i> Planned for Delivery</a></li>
+								<li><a href="index.php?Report=distribution-02&View=Delivered"><?php if ($New_Delivery_Dis !=0) { echo '<small class="badge pull-right bg-navy">'.$New_Delivery_Dis.'</small>';} ?><i class="fa fa-file-text"></i> Confirmed Delivery</a></li>
+							</ul>
+						</li>
+						<?php endif;?>
+						<!-- ***************************************************** -->
+						<!-- End of Distribution Menu **************************** -->
+						<!-- ***************************************************** -->
+					</ul>
+				</section>
+				<!-- /.sidebar -->
