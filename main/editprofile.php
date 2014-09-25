@@ -9,7 +9,7 @@ if(!isset($_SESSION['ID']) || (trim($_SESSION['ID']) == '')) {
     header("location: login.php");
     exit();
 }
-$_SESSION['Connection']	= 'Eta'; /*Set Connection Session for members tbale*/
+$_SESSION['Connection']	= 'Eta Mifad'; /*Set Connection Session for members tbale*/
 include_once('db_connection.php');
 
 if (isset($_REQUEST['Submit']))

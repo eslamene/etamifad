@@ -10,11 +10,18 @@ include_once('db_connection.php');
 /*********************************/
 /*********************************/
 /*Check session is present or not*/
-/********************************/
+/*********************************/
 if(!isset($_SESSION['ID']) || (trim($_SESSION['ID']) == ''))
 { 
 	header("location: login.php");
 	exit();
+}
+/*********************************/
+/*Check Change Password***********/
+/*********************************/
+elseif($_SESSION['ChangePassword'] == 1)
+{
+	header("location: editprofile.php");
 }
 /*********************************/
 ?>

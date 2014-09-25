@@ -46,6 +46,7 @@ if (isset($_REQUEST['Connection']))
 		$_SESSION['Designation']    = $UserData['Designation'];
 		$_SESSION['Title']          = $UserData['Title'];
 		$_SESSION['Avatar']         = $UserData['Avatar'];
+		$_SESSION['ChangePassword'] = $UserData['ChangePassword'];
 		$_SESSION['PageName'] 		= '';
 
 		session_write_close();
