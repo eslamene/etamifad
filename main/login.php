@@ -90,7 +90,7 @@ if (isset($_REQUEST['Connection']))
 				</div>
 				<div class="footer">                                                               
 					<div>
-						<button class="btn bg-green btn-lg btn-flat margin btn-block" name="Connection" value="Eta Mifad">Login</button>
+						<button class="btn bg-green btn-lg btn-flat margin btn-block" name="Connection" value="<?php echo $DBConnection01;?>">Login</button>
 					</div>
 					<!-- <p><a href="#">I forgot my password</a></p>
 					<a href="register.html" class="text-center">Register a new membership</a> -->

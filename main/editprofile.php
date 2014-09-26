@@ -3,14 +3,27 @@ ob_start();
 //Start session
 session_start();
  
-//Check whether the session variable SESS_MEMBER_ID is present or not
-if(!isset($_SESSION['ID']) || (trim($_SESSION['ID']) == '')) {
-
-    header("location: login.php");
-    exit();
-}
-$_SESSION['Connection']	= 'Eta Mifad'; /*Set Connection Session for members tbale*/
+/*********************************/
+/*import db_connection file*/
+/*********************************/
 include_once('db_connection.php');
+/*********************************/
+/*********************************/
+/*Check session is present or not*/
+/*********************************/
+if(!isset($_SESSION['ID']) || (trim($_SESSION['ID']) == ''))
+{ 
+	header("location: login.php");
+	exit();
+}
+/*********************************/
+/*Check Change Password***********/
+/*********************************/
+elseif($_SESSION['ChangePassword'] == 1)
+{
+	header("location: editprofile.php");
+}
+/*********************************/
 
 if (isset($_REQUEST['Submit']))
 {

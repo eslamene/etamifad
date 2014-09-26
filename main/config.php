@@ -1,5 +1,5 @@
 <?php 
-$DBConnection01 = "Eta Mifad"; 		/*Main Connection*/
+$DBConnection01 	= "Eta Mifad"; 		/*Main Connection*/
 /********************************//********************************/
 /********************************//********************************/
 $Themes				=	"skin-black";		/*Themes Color skin-black or skin-blue*/
