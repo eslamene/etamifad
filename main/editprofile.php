@@ -17,14 +17,6 @@ if(!isset($_SESSION['ID']) || (trim($_SESSION['ID']) == ''))
 	exit();
 }
 /*********************************/
-/*Check Change Password***********/
-/*********************************/
-elseif($_SESSION['ChangePassword'] == 1)
-{
-	header("location: editprofile.php");
-}
-/*********************************/
-
 if (isset($_REQUEST['Submit']))
 {
 	$UserName 		= $_SESSION['UserName'];
