@@ -16,7 +16,7 @@ if (isset($_SESSION['Connection']))
 		$DBName		= "etamifad_forecast";
 	
 		$MySQLConnection 	=	mysqli_connect($HostName, $UserName, $Password, $DBName);
-		if (!$MySQLConnection->set_charset('utf8'))
+		if (!$MySQLConnection)
 		{
 			die('Connect Error (' . mysqli_connect_errno() . ') '. mysqli_connect_error());
 		}
