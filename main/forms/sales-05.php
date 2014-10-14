@@ -113,7 +113,7 @@
 															<tr>
 															<?php
 															/*Quarter Closing Date*/
-															if(strtotime($LastYear."-11-01") < time())
+															if(strtotime($LastYear."-09-28") < time())
 															{ $ReadOnly_Q1 = "readonly";}
 															else {$ReadOnly_Q1 = "";}
 															?>

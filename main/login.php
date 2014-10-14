@@ -52,13 +52,6 @@ if (isset($_REQUEST['Connection']))
 		session_write_close();
 		header('Location: ./index.php');
 	}
-/*Check Change Password***********/
-/*********************************/
-if($_SESSION['ChangePassword'] == 1)
-{
-	header("location: ./editprofile.php");
-}
-/*********************************/
 }
 ?>
 <!DOCTYPE html>
