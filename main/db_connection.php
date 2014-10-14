@@ -10,10 +10,10 @@ if (isset($_SESSION['Connection']))
 	if ($_SESSION['Connection']==$DBConnection01) 
 	{
 		//connect to a MySQL
-		$UserName 	= "root";
-		$Password 	= "";
+		$UserName 	= "webadmin";
+		$Password 	= "ET@itSpp0rt";
 		$HostName 	= "localhost"; 
-		$DBName		= "etamifad_eta";
+		$DBName		= "etamifad_forecast";
 	
 		$MySQLConnection 	=	mysqli_connect($HostName, $UserName, $Password, $DBName);
 		if (!$MySQLConnection->set_charset('utf8'))
